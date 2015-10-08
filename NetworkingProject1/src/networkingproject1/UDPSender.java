@@ -5,10 +5,13 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class UDPSender {
-	public static void main (String args[ ]) {
+public class UDPSender implements Runnable{
+    @Override
+	public void run () {
                 //use localhost to experiment on a standalone computer
-                String hostname="localhost";    String message = "HELLO USING UDP!";
+            //can take this out to use user message
+                String hostname="localhost";    
+                String message = "HELLO USING UDP!";
 		try {
 		   // Create a datagram socket, look for the first available port
 		   DatagramSocket socket = new DatagramSocket();

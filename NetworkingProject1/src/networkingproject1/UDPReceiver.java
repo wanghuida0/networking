@@ -6,8 +6,9 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class UDPReceiver  {
-	public static void main (String args[ ]) {
+public class UDPReceiver  implements Runnable{
+        @Override
+	public void run () {
 	  try{
 		// Create a datagram socket, bound to the specific port 2000
 		DatagramSocket socket = new DatagramSocket(2000);

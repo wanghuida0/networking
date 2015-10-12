@@ -7,6 +7,11 @@ import java.io.*;
 import java.util.*;
 
 public class UDPReceiver  implements Runnable{
+    
+    public UDPReceiver() {
+        
+    } 
+    
     @Override
     public void run () {
         try{

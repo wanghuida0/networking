@@ -10,6 +10,10 @@ public class UDPSender implements Runnable{
     public String hostname="localhost";    
     public String message = "HELLO USING UDP!";
     
+    public UDPSender() {
+        
+    }
+    
     @Override
     public void run () {
         //use localhost to experiment on a standalone computer

@@ -5,7 +5,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class UDPSender implements Runnable{
+public class UDPSender extends Thread{
     
     public String hostname="localhost";    
     public String message = "HELLO USING UDP!";
@@ -43,10 +43,10 @@ public class UDPSender implements Runnable{
             packet.setPort(2000);
             //send the packet
             socket.send(packet);
-            System.out.println ("Packet sent at!" + new Date());
+            System.out.println ("Packet sent at: " + new Date());
 
             // Display packet information
-            System.out.println ("Sent by  : " + remote_addr.getHostAddress() );
+            System.out.println ("Sent by: " + remote_addr.getHostAddress() );
             System.out.println ("Send from: " + packet.getPort());
 
 	}
@@ -56,5 +56,7 @@ public class UDPSender implements Runnable{
 	catch (IOException e)	{
             System.out.println ("Error - " + e);
 	}
+        
+        TextInterface.writeOutputToFile(message);
     }
 }

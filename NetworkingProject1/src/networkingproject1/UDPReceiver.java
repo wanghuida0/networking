@@ -6,7 +6,9 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class UDPReceiver  implements Runnable{
+public class UDPReceiver extends Thread { //implements Runnable{
+    
+    private String message = "";
     
     public UDPReceiver() {
         
@@ -40,8 +42,11 @@ public class UDPReceiver  implements Runnable{
                 int data = bin.read();
 		if (data == -1)
                     break;
-		else
+                else {
                     System.out.print ( (char) data) ;
+                    message += (char) data;
+                }
+                    
             }
 			
             socket.close( );
@@ -49,5 +54,8 @@ public class UDPReceiver  implements Runnable{
 	catch (IOException e) 	{
             System.out.println ("Error - " + e);
 	}
+        
+        TextInterface.incomingTextBox.setText(message);
+        TextInterface.writeInputToFile(message);
    }
 } //end of class definition

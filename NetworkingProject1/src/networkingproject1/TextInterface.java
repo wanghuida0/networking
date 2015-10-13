@@ -6,10 +6,13 @@
 
 package networkingproject1;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 /**
  *
@@ -17,8 +20,6 @@ import java.util.logging.Logger;
  */
 public class TextInterface extends javax.swing.JFrame {
 
-    UDPSender sender = new UDPSender();
-    UDPReceiver receiver = new UDPReceiver();
     
     /**
      * Creates new form TextInterface
@@ -37,25 +38,20 @@ public class TextInterface extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        messageTextBox = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         IPAddressBox = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        incomingTextBox = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        messageTextBox = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        incomingTextBox = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Message:");
 
-        messageTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                messageTextBoxActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setText("IP address: ");
+        jLabel2.setText("Send to:");
 
         jButton1.setText("Send");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -66,80 +62,118 @@ public class TextInterface extends javax.swing.JFrame {
 
         jLabel3.setText("Incoming Message: ");
 
-        jLabel4.setText("Sent From:");
+        messageTextBox.setColumns(20);
+        messageTextBox.setRows(5);
+        jScrollPane1.setViewportView(messageTextBox);
+
+        incomingTextBox.setColumns(20);
+        incomingTextBox.setRows(5);
+        jScrollPane2.setViewportView(incomingTextBox);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1)
-                            .addComponent(messageTextBox, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                            .addComponent(IPAddressBox)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(incomingTextBox))
-                    .addComponent(jLabel4))
-                .addContainerGap(122, Short.MAX_VALUE))
+                        .addComponent(IPAddressBox, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(messageTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(IPAddressBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(IPAddressBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1)
+                            .addComponent(jLabel2)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addComponent(jLabel1)))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(39, 39, 39)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(incomingTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(59, 59, 59)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void messageTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_messageTextBoxActionPerformed
-        // TODO add your handling code here:
-        sender.message = messageTextBox.getText();
-    }//GEN-LAST:event_messageTextBoxActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            // TODO add your handling code here:
-            writeToFile();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(TextInterface.class.getName()).log(Level.SEVERE, null, ex);
-        }
+  
+        UDPSender sender = new UDPSender();
+        UDPReceiver receiver = new UDPReceiver();
         
-        //sender.run();
-        //receiver.run();
+        sender.message = messageTextBox.getText();
+        sender.hostname = IPAddressBox.getText();
         
-        incomingTextBox.setText(messageTextBox.getText());
+        
+        sender.start();
+        receiver.start();
+        
+        sender.run();
+        receiver.run();
+        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void writeToFile() throws FileNotFoundException {
-        PrintWriter writer = new PrintWriter("message.txt");
-        writer.println(messageTextBox.getText());
-        writer.close();
+    public static void writeInputToFile(String message){
+        try {
+            String temp = message;
+            File file = new File("received.txt");
+            if (!file.exists()){
+                file.createNewFile();
+            }
+            
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            
+            bw.write(temp);
+            bw.close();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+        
     }
+    
+    public static void writeOutputToFile(String message) {
+          try {
+            String temp = message;
+            File file = new File("sent.txt");
+            if (!file.exists()){
+                file.createNewFile();
+            }
+            
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            
+            bw.write(temp);
+            bw.close();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+        
+    }   
     
     /**
      * @param args the command line arguments
@@ -167,24 +201,24 @@ public class TextInterface extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(TextInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TextInterface().setVisible(true);
-            }
-        });
+        
+        TextInterface temp = new TextInterface();
+        temp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        temp.setVisible(true);
+        UDPReceiver receiver = new UDPReceiver();
+        receiver.start();
         
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField IPAddressBox;
-    private javax.swing.JTextField incomingTextBox;
+    public static javax.swing.JTextArea incomingTextBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField messageTextBox;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea messageTextBox;
     // End of variables declaration//GEN-END:variables
 }

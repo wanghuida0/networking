@@ -1,3 +1,9 @@
+/*
+    This class creates the UDPSender that sends
+    messages to a UDPReceiver. It also handles printing 
+    the outgoing message to the sent message file. 
+*/
+
 package networkingproject1;
 
 //The UDP Sender
@@ -7,17 +13,18 @@ import java.util.*;
 
 public class UDPSender extends Thread{
     
+    //variables for sending a specific message to a specific IP address
     public String hostname="localhost";    
-    public String message = "HELLO USING UDP!";
+    public String message = "";
     
+    //empty constructor used to create a sender object
     public UDPSender() {
         
     }
     
+    //override the run method with the given UDPSender code
     @Override
     public void run () {
-        //use localhost to experiment on a standalone computer
-        //can take this out to use user message
         
         try {
             // Create a datagram socket, look for the first available port
@@ -57,6 +64,7 @@ public class UDPSender extends Thread{
             System.out.println ("Error - " + e);
 	}
         
+        //print the message to the sent message file
         TextInterface.writeOutputToFile(message);
     }
 }

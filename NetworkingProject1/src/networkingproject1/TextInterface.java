@@ -1,17 +1,15 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This class creates the GUI for sending and receiving messges.
+ * The writeInputToFile method saves the incoming message to a text file.
+ * The writeOutputToFile method saves the outgoing message to a text file.
  */
 
 package networkingproject1;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.swing.JFrame;
 
 /**
@@ -19,11 +17,8 @@ import javax.swing.JFrame;
  * @author Nikki
  */
 public class TextInterface extends javax.swing.JFrame {
-
     
-    /**
-     * Creates new form TextInterface
-     */
+    //constructor for the GUI that initializes the necessary components
     public TextInterface() {
         initComponents();
     }
@@ -46,6 +41,8 @@ public class TextInterface extends javax.swing.JFrame {
         messageTextBox = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         incomingTextBox = new javax.swing.JTextArea();
+        senderTextBox = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,6 +67,8 @@ public class TextInterface extends javax.swing.JFrame {
         incomingTextBox.setRows(5);
         jScrollPane2.setViewportView(incomingTextBox);
 
+        jLabel4.setText("Sent from:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,15 +78,18 @@ public class TextInterface extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel4))
                 .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(IPAddressBox, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(IPAddressBox, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1)
+                        .addComponent(jScrollPane2))
+                    .addComponent(senderTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -111,30 +113,34 @@ public class TextInterface extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(59, 59, 59)))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(senderTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-  
+        
+        //create a sender and receiver object
         UDPSender sender = new UDPSender();
         UDPReceiver receiver = new UDPReceiver();
         
+        //set the message and destination for the sent message
         sender.message = messageTextBox.getText();
         sender.hostname = IPAddressBox.getText();
         
-        
+        //start the sender and receiver threads
+        //this reciever is used to update the messages received after sending
         sender.start();
         receiver.start();
-        
-        sender.run();
-        receiver.run();
-        
 
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    //writes the incoming message to a file
     public static void writeInputToFile(String message){
         try {
             String temp = message;
@@ -155,6 +161,7 @@ public class TextInterface extends javax.swing.JFrame {
         
     }
     
+    //writes the outgoing message to a file
     public static void writeOutputToFile(String message) {
           try {
             String temp = message;
@@ -175,9 +182,7 @@ public class TextInterface extends javax.swing.JFrame {
         
     }   
     
-    /**
-     * @param args the command line arguments
-     */
+    //this is the main of the program that creates a GUI and base receiver thread
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -202,12 +207,15 @@ public class TextInterface extends javax.swing.JFrame {
         }
         //</editor-fold>
         
+        //initialize the GUI
         TextInterface temp = new TextInterface();
         temp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         temp.setVisible(true);
+        
+        //create a receiver thread so you can always recieve messages
+        //without having to first send a message
         UDPReceiver receiver = new UDPReceiver();
         receiver.start();
-        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -217,8 +225,10 @@ public class TextInterface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea messageTextBox;
+    public static javax.swing.JTextField senderTextBox;
     // End of variables declaration//GEN-END:variables
 }

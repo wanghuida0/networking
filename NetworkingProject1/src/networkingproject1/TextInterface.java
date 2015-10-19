@@ -123,6 +123,8 @@ public class TextInterface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //when the send button is clicked, create sender and receiver threads
+    //and sends or recevies s a message
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         //create a sender and receiver object

@@ -13,7 +13,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class UDPReceiver extends Thread { //implements Runnable{
+public class UDPReceiver extends Thread { 
     
     private String message = "";
     private String sender = "";
